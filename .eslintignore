@@ -1,0 +1,4 @@
+node_modules
+dist
+public
+src/mall-common/assets/*

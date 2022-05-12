@@ -1,0 +1,47 @@
+.v-btn {
+  display: inline-block;
+  height: 22px;
+  line-height: 22px;
+  margin: 0 4px 0 0;
+  padding: 0 6px;
+  border-radius: 2px;
+  font-size: 12px;
+  vertical-align: middle;
+  opacity: 1;
+  overflow: hidden;
+  background: @background-color-base;
+  color: @primary-color;
+  box-sizing: content-box;
+  transition: color 0.2s linear, background-color 0.2s linear,
+    border 0.2s linear, box-shadow 0.2s linear;
+  cursor: pointer;
+}
+.v-btn-large {
+  font-size: 14px;
+  height: 28px;
+  line-height: 28px;
+  margin: 0 8px 0 0;
+  padding: 0 12px;
+}
+.v-btn:last-child {
+  margin-right: 0;
+}
+.v-btn-primary {
+  background-color: @primary-color-1;
+  color: @primary-color;
+}
+.v-btn-success {
+  background-color: @success-color-1;
+  color: @success-color;
+}
+.v-btn-warning {
+  background-color: @warning-color-1;
+  color: @warning-color;
+}
+.v-btn-error {
+  background-color: @error-color-1;
+  color: @error-color;
+}
+.v-btn:hover {
+  opacity: 0.8;
+}

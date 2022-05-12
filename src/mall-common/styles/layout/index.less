@@ -1,0 +1,154 @@
+@headerHeight: 60px;
+@sideWidth: 120px;
+
+.v-layout {
+  height: 100%;
+}
+
+.v-layout-sider {
+  width: @sideWidth;
+  height: 100vh;
+  background-color: #001529;
+  box-shadow: @box-shadow-base;
+  transition: all 0.2s @ease-in-out;
+  .logo {
+    height: 40px;
+    line-height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 10px;
+    color: @primary-color;
+    font-size: 18px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .nav {
+    height: calc(~'100% - 60px');
+    overflow: hidden auto;
+    &-item {
+      font-size: 14px;
+      padding: 10px;
+      &-link {
+        display: flex;
+        position: relative;
+        color: @text-color-secondary-dark;
+      }
+      &-active {
+        color: @white;
+        ::after {
+          position: absolute;
+          content: '';
+          content: '';
+          width: 4px;
+          background: @white;
+          border-radius: 2px;
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+        }
+      }
+      .icon {
+        width: 20px;
+      }
+    }
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+}
+
+.v-layout-header {
+  background-color: #fff;
+  height: @headerHeight;
+  padding: 0 16px 0 0;
+  display: flex;
+  &-trigger {
+    height: @headerHeight;
+    line-height: @headerHeight;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 16px;
+    transition: all 0.2s @ease-in-out;
+    &:hover {
+      background: #f8f8f9;
+    }
+    .rotate {
+      transform: rotate(90deg);
+    }
+  }
+  &-menu {
+    flex: 1;
+  }
+  &-right {
+    display: flex;
+  }
+  &-notice {
+    &-menu {
+      min-width: 280px;
+    }
+  }
+}
+
+.v-layout-content {
+  display: flex;
+  overflow: hidden;
+  &-sub-sider {
+    flex-shrink: 0;
+    width: 120px;
+    overflow: hidden;
+    position: relative;
+    padding: 16px 0;
+    .nav {
+      height: 100%;
+      overflow: hidden auto;
+      padding: 0 10px;
+      &-item {
+        &-link {
+          display: flex;
+          padding: 12px 5px 12px 10px;
+          color: @text-color;
+          font-size: 12px;
+          .icon {
+            width: 16px;
+          }
+          .text {
+            flex: 1;
+          }
+        }
+        &-active {
+          background-image: radial-gradient(circle, @primary-color, @primary-color-5);
+          // background-color: @primary-color;
+          color: @white;
+          border-radius: 4px;
+        }
+      }
+      &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+    }
+  }
+  &-main {
+    margin: 16px;
+    flex: 1;
+    background-color: #fff;
+  }
+}
+
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all 0.5s;
+}
+
+.fade-transform-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

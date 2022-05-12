@@ -1,0 +1,24 @@
+.v-card {
+  background-color: #fff;
+  position: relative;
+  box-shadow: @box-shadow-base;
+  &-header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid @border-color-base;
+    &-title {
+      font-size: @font-size-lg;
+      color: @text-color;
+      font-weight: 700;
+      flex: 1;
+    }
+    &-extra {
+    }
+  }
+  &-content {
+    padding: 16px;
+  }
+}

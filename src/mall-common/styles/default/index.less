@@ -1,0 +1,57 @@
+@import 'ant-design-vue/dist/antd.less';
+@import 'theme.less';
+
+// table
+.ant-table-thead > tr > th {
+  // font-weight: 700;
+  color: @text-color;
+}
+
+.ant-table.ant-table-bordered > .ant-table-container {
+  border-bottom: 1px solid @border-color-base;
+}
+
+.ant-table-pagination.ant-pagination {
+  margin: 10px 0 0 0;
+}
+
+.ant-pagination.mini .ant-pagination-prev,
+.ant-pagination.mini .ant-pagination-next {
+  background-color: @background-color-base;
+}
+
+.ant-pagination.mini .ant-pagination-item:not(.ant-pagination-item-active) {
+  background-color: @background-color-base;
+}
+
+.ant-pagination li {
+  margin-right: 4px !important;
+}
+
+.ant-pagination-item-active {
+  border: 0;
+  background-color: @primary-color !important;
+  a,
+  a:hover {
+    color: #fff;
+  }
+}
+
+// drawer
+.ant-drawer {
+  .ant-drawer-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: @drawer-header-close-size;
+    height: @drawer-header-close-size;
+    line-height: @drawer-header-close-size;
+  }
+  .ant-drawer-title {
+    color: @text-color;
+    font-weight: 700;
+  }
+  .ant-drawer-footer {
+    text-align: right;
+  }
+}

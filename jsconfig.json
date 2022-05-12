@@ -1,0 +1,6 @@
+{
+  "vueCompilerOptions": {
+    "experimentalDisableTemplateSupport": true,
+    "jsx": "preserve"
+  }
+}
