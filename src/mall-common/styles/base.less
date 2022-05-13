@@ -121,18 +121,6 @@ html {
 //   border-collapse: collapse;
 //   border-spacing: 0;
 // }
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar,
-::-webkit-scrollbar-track-piece {
-  background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 2px;
-  background-color: rgba(144, 146, 152, 0.3);
-}
 
 .v-cursor {
   cursor: pointer;
@@ -140,7 +128,7 @@ html {
 
 .v-title {
   font-size: @font-size-lg;
-  line-height: @line-height-base;
+  line-height: @line-height-base - 0.2;
   padding-left: 10px;
   margin-bottom: @margin-lg;
   border-left: 4px solid @primary-color;

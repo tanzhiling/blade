@@ -26,9 +26,9 @@ export default {
       return { ...props, ...unref(innerPropsRef) };
     });
 
-    const { getScrollRef, redoHeight } = useScroll(getProps, tableElRef);
-
     const { loading, dataSource, pagination, reload, handleTableChange } = useDataSource(getProps);
+
+    const { getScrollRef, redoHeight } = useScroll(getProps, tableElRef, dataSource);
 
     const getBindValues = computed(() => {
       const { isPage } = unref(getProps);

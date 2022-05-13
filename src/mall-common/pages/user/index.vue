@@ -2,7 +2,7 @@
   <v-card :actions="actions">
     <a-row>
       <a-col :span="4">
-        <a-tree class="v-m" show-icon :tree-data="tree" :load-data="onLoadData" />
+        <a-tree show-icon :tree-data="deptData" />
       </a-col>
       <a-col :span="20">
         <v-query :model="model" @on-search="reload" @on-reset="reload">
@@ -23,21 +23,20 @@
               <a-tag v-else-if="record.sexName === 2" color="blue">女</a-tag>
             </template>
             <template v-if="column.dataIndex === 'actions'">
-              <v-btn>编辑</v-btn>
-              <v-btn>删除</v-btn>
-              <v-btn>重置密码</v-btn>
+              <v-btn @click="onEdit(record)">编辑</v-btn>
+              <v-btn @click="onDelete(record)">删除</v-btn>
+              <v-btn @click="onReset(record)">重置密码</v-btn>
             </template>
           </template>
         </v-table>
       </a-col>
     </a-row>
-    <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
+    <i-drawer v-model:visible="visible" :data="detail" :dept-data="deptData" @reload="reload" />
   </v-card>
 </template>
-
 <script>
 import { onMounted, ref, reactive } from 'vue';
-import { ApiGetOrgLazyTree } from '@mall-common/api/org';
+import { ApiGetOrgTree } from '@mall-common/api/org';
 import { ApiGetUserPage } from '@mall-common/api/user';
 import useTable from '@mall-common/hooks/useTable';
 import useRequest from '@mall-common/hooks/useRequest';
@@ -48,12 +47,13 @@ export default {
     const model = reactive({});
     const detail = ref();
     const visible = ref(false);
-    const [tree] = useRequest({
-      request: ApiGetOrgLazyTree,
+    const [deptData] = useRequest({
+      request: ApiGetOrgTree,
       params: { parentId: '0' },
       isInit: true,
     });
-    const [registerTable, { reload, redoHeight }] = useTable({
+
+    const [registerTable, { reload }] = useTable({
       request: ApiGetUserPage,
       isPage: true,
       params: model,
@@ -104,6 +104,8 @@ export default {
 
     const onDelete = () => {};
 
+    const onReset = () => {};
+
     const actions = [
       {
         text: '新增用户',
@@ -119,23 +121,6 @@ export default {
       },
     ];
 
-    const onLoadData = (treeNode) => {
-      return new Promise((resolve) => {
-        ApiGetOrgLazyTree({ parentId: treeNode.id }).then((res) => {
-          if (res.success) {
-            treeNode.dataRef.children = res.data.map((item) => {
-              if (!item.hasChildren) {
-                item.isLeaf = true;
-              }
-              return item;
-            });
-            tree.value = [...tree.value];
-          }
-        });
-        resolve();
-      });
-    };
-
     onMounted(() => {
       reload();
     });
@@ -145,11 +130,11 @@ export default {
       detail,
       visible,
       reload,
-      tree,
+      deptData,
       registerTable,
       onEdit,
       onDelete,
-      onLoadData,
+      onReset,
       actions,
     };
   },

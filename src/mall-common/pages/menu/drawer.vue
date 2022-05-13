@@ -98,20 +98,15 @@ export default {
     };
 
     const onSubmit = async () => {
-      formRef.value.validate().then(() => {
+      formRef.value.validate().then(async () => {
         loading.value = true;
-        ApiSaveMenu(model.value)
-          .then((res) => {
-            loading.value = false;
-            if (res.success) {
-              message.success(res.msg);
-              emit('reload');
-              onClose();
-            }
-          })
-          .catch(() => {
-            loading.value = false;
-          });
+        const { success, msg } = await ApiSaveMenu(model.value);
+        loading.value = false;
+        if (success) {
+          message.success(msg);
+          emit('reload');
+          onClose();
+        }
       });
     };
 

@@ -1,10 +1,26 @@
-import { computed, unref, ref, nextTick } from 'vue';
+import { computed, watch, unref, ref, nextTick } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import onMountedOrActivated from '@mall-common/hooks/onMountedOrActivated';
 import useWindowSizeFn from '@mall-common/hooks/useWindowSizeFn';
 
-const useTableScroll = (propsRef, tableElRef) => {
+const useTableScroll = (propsRef, tableElRef, daataSource) => {
   const tableHeightRef = ref(null);
+
+  watch(
+    () => unref(daataSource)?.length,
+    () => debounceRedoHeight(),
+    {
+      flush: 'post',
+    },
+  );
+
+  const redoHeight = () => {
+    nextTick(() => {
+      calcTableHeight();
+    });
+  };
+
+  const debounceRedoHeight = useDebounceFn(redoHeight, 100);
 
   const setHeight = (heigh) => {
     tableHeightRef.value = heigh;
@@ -13,29 +29,23 @@ const useTableScroll = (propsRef, tableElRef) => {
   let bodyEl;
 
   const calcTableHeight = () => {
+    const tableData = unref(daataSource);
     const { isPage } = unref(propsRef);
     const table = unref(tableElRef);
     if (!table) return;
     const tableEl = table.$el;
     if (!tableEl) return;
     if (!bodyEl) {
-      bodyEl = tableEl.querySelector('.ant-table-body');
+      bodyEl = tableEl.querySelector('.ant-table');
       if (!bodyEl) return;
     }
     const { top } = tableEl.getBoundingClientRect();
     const tablePadding = 32;
-    const paginationHeight = isPage ? 34 : 0;
+    const paginationHeight = isPage && tableData.length > 0 ? 34 : 0;
     const headerHeight = 43;
-    const currentHeight =
-      document.body.clientHeight - top - headerHeight - tablePadding - paginationHeight;
+    const currentHeight = document.body.clientHeight - top - tablePadding - paginationHeight;
     bodyEl.style.height = currentHeight + 'px';
-    setHeight(currentHeight);
-  };
-
-  const redoHeight = () => {
-    nextTick(() => {
-      calcTableHeight();
-    });
+    setHeight(currentHeight - headerHeight);
   };
 
   const getScrollRef = computed(() => {
@@ -46,8 +56,6 @@ const useTableScroll = (propsRef, tableElRef) => {
       ...scroll,
     };
   });
-
-  const debounceRedoHeight = useDebounceFn(redoHeight, 100);
 
   useWindowSizeFn(calcTableHeight, 280);
 

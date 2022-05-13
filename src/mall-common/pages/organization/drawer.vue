@@ -2,10 +2,10 @@
   <a-drawer :visible="show" :width="520" :title="title" :mask-closable="false" @close="onClose">
     <a-form ref="formRef" autocomplete="off" :label-col="{ span: 4 }" :model="model" :rules="rules">
       <a-form-item label="机构名称" name="deptName">
-        <a-input v-model:value="model.deptName" />
+        <a-input v-model:value="model.deptName" allow-clear />
       </a-form-item>
       <a-form-item label="机构全称" name="fullName">
-        <a-input v-model:value="model.fullName" />
+        <a-input v-model:value="model.fullName" allow-clear />
       </a-form-item>
       <a-form-item label="上级机构" name="parentId">
         <a-tree-select v-model:value="model.parentId" :tree-data="tree" />
@@ -76,21 +76,16 @@ export default {
       show.value = false;
     };
 
-    const onSubmit = async () => {
-      formRef.value.validate().then(() => {
+    const onSubmit = () => {
+      formRef.value.validate().then(async () => {
         loading.value = true;
-        ApiSaveOrg(model.value)
-          .then((res) => {
-            loading.value = false;
-            if (res.success) {
-              message.success(res.msg);
-              emit('reload');
-              onClose();
-            }
-          })
-          .catch(() => {
-            loading.value = false;
-          });
+        const { success, msg } = await ApiSaveOrg(model.value);
+        loading.value = false;
+        if (success) {
+          message.success(msg);
+          emit('reload');
+          onClose();
+        }
       });
     };
 

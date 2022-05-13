@@ -2,13 +2,30 @@
 @import 'theme.less';
 
 // table
+.ant-table {
+  ::-webkit-scrollbar-track {
+    background-color: #0000000d;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: #90939933;
+  }
+}
 .ant-table-thead > tr > th {
   // font-weight: 700;
   color: @text-color;
 }
 
 .ant-table.ant-table-bordered > .ant-table-container {
-  border-bottom: 1px solid @border-color-base;
+  // border-bottom: 1px solid @border-color-base;
 }
 
 .ant-table-pagination.ant-pagination {
@@ -34,6 +51,9 @@
   a,
   a:hover {
     color: #fff;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #0000000d;
   }
 }
 
