@@ -39,3 +39,12 @@ export const ApiGetMenuTree = (params) => {
     params,
   });
 };
+
+// 删除菜单
+export const ApiDelMenu = (data) => {
+  return request('/blade-system/menu/remove', {
+    method: 'post',
+    data,
+    requestType: 'form',
+  });
+};

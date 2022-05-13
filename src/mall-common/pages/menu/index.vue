@@ -16,20 +16,18 @@
       </v-query-item>
     </v-query>
     <v-table @register="registerTable">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'source'">
-          <v-icon :type="record.source" :size="18" />
-        </template>
-        <template v-if="column.dataIndex === 'category'">
-          <a-tag v-if="record.category === 1" color="blue">菜单</a-tag>
-          <a-tag v-else-if="record.category === 2" color="blue">页面</a-tag>
-          <a-tag v-else-if="record.category === 3" color="blue">按钮</a-tag>
-        </template>
-        <template v-if="column.dataIndex === 'actions'">
-          <v-btn @click="onEdit(record)">编辑</v-btn>
-          <v-btn @click="onDelete(record)">删除</v-btn>
-          <v-btn>新增下级</v-btn>
-        </template>
+      <template #source="{ record }">
+        <v-icon :type="record.source" :size="18" />
+      </template>
+      <template #category="{ record }">
+        <a-tag v-if="record.category === 1" color="blue">菜单</a-tag>
+        <a-tag v-else-if="record.category === 2" color="blue">页面</a-tag>
+        <a-tag v-else-if="record.category === 3" color="blue">按钮</a-tag>
+      </template>
+      <template #actions="{ record }">
+        <v-btn @click="onEdit(record)">编辑</v-btn>
+        <v-btn @click="onDel(record)">删除</v-btn>
+        <v-btn>新增下级</v-btn>
       </template>
     </v-table>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
@@ -38,8 +36,9 @@
 
 <script>
 import { onMounted, reactive, ref } from 'vue';
-import { ApiGetMenuLazyList } from '@mall-common/api/menu';
+import { ApiGetMenuLazyList, ApiDelMenu } from '@mall-common/api/menu';
 import useTable from '@mall-common/hooks/useTable';
+import useModal from '@mall-common/hooks/useModal';
 import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },
@@ -47,6 +46,7 @@ export default {
     const model = reactive({});
     const detail = ref();
     const visible = ref(false);
+    const modal = useModal();
     const [registerTable, { reload }] = useTable({
       rowKey: 'id',
       request: ApiGetMenuLazyList,
@@ -67,8 +67,13 @@ export default {
           dataIndex: 'path',
         },
         {
+          title: '页面路径',
+          dataIndex: 'page',
+        },
+        {
           title: '图标',
           dataIndex: 'source',
+          width: 100,
         },
         {
           title: '类型',
@@ -115,7 +120,9 @@ export default {
       visible.value = true;
     };
 
-    const onDelete = () => {};
+    const onDel = (row) => {
+      modal.del('菜单', ApiDelMenu, { ids: row.id }, () => reload());
+    };
 
     onMounted(() => {
       reload();
@@ -129,7 +136,7 @@ export default {
       registerTable,
       actions,
       onEdit,
-      onDelete,
+      onDel,
     };
   },
 };

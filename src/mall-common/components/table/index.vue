@@ -1,8 +1,10 @@
 <template>
   <div>
     <a-table ref="tableElRef" v-bind="getBindValues" @change="handleTableChange">
-      <template v-for="item in renderSlots" #[item]="scope">
-        <slot :name="item" v-bind="scope"></slot>
+      <template #bodyCell="{ column, record }">
+        <template v-for="item in renderSlots">
+          <slot v-if="column.dataIndex === item" :name="item" v-bind="{ record }"></slot>
+        </template>
       </template>
     </a-table>
   </div>

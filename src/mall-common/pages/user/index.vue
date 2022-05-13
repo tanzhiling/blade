@@ -14,19 +14,14 @@
           </v-query-item>
         </v-query>
         <v-table @register="registerTable">
-          <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex === 'source'">
-              <v-icon :type="record.source" :size="18" />
-            </template>
-            <template v-if="column.dataIndex === 'sexName'">
-              <a-tag v-if="record.sexName === 1" color="blue">男</a-tag>
-              <a-tag v-else-if="record.sexName === 2" color="blue">女</a-tag>
-            </template>
-            <template v-if="column.dataIndex === 'actions'">
-              <v-btn @click="onEdit(record)">编辑</v-btn>
-              <v-btn @click="onDelete(record)">删除</v-btn>
-              <v-btn @click="onReset(record)">重置密码</v-btn>
-            </template>
+          <template #sexName="{ record }">
+            <a-tag v-if="record.sexName === 1" color="blue">男</a-tag>
+            <a-tag v-else-if="record.sexName === 2" color="blue">女</a-tag>
+          </template>
+          <template #actions="{ record }">
+            <v-btn @click="onEdit(record)">编辑</v-btn>
+            <v-btn @click="onDel(record)">删除</v-btn>
+            <v-btn @click="onReset(record)">重置密码</v-btn>
           </template>
         </v-table>
       </a-col>
@@ -37,8 +32,9 @@
 <script>
 import { onMounted, ref, reactive } from 'vue';
 import { ApiGetOrgTree } from '@mall-common/api/org';
-import { ApiGetUserPage } from '@mall-common/api/user';
+import { ApiGetUserPage, ApiDelUser } from '@mall-common/api/user';
 import useTable from '@mall-common/hooks/useTable';
+import useModal from '@mall-common/hooks/useModal';
 import useRequest from '@mall-common/hooks/useRequest';
 import iDrawer from './drawer.vue';
 export default {
@@ -47,12 +43,12 @@ export default {
     const model = reactive({});
     const detail = ref();
     const visible = ref(false);
+    const modal = useModal();
     const [deptData] = useRequest({
       request: ApiGetOrgTree,
       params: { parentId: '0' },
       isInit: true,
     });
-
     const [registerTable, { reload }] = useTable({
       request: ApiGetUserPage,
       isPage: true,
@@ -102,8 +98,9 @@ export default {
       visible.value = true;
     };
 
-    const onDelete = () => {};
-
+    const onDel = (row) => {
+      modal.del('用户', ApiDelUser, { ids: row.id }, () => reload());
+    };
     const onReset = () => {};
 
     const actions = [
@@ -133,7 +130,7 @@ export default {
       deptData,
       registerTable,
       onEdit,
-      onDelete,
+      onDel,
       onReset,
       actions,
     };

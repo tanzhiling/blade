@@ -9,7 +9,7 @@ const useForm = (props) => {
     const form = unref(formRef);
     if (!form) {
       console.error(
-        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!'
+        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!',
       );
     }
     await nextTick();
@@ -35,7 +35,7 @@ const useForm = (props) => {
       {
         immediate: true,
         deep: true,
-      }
+      },
     );
   }
 

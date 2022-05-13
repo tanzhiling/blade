@@ -6,12 +6,10 @@
       </v-query-item>
     </v-query>
     <v-table @register="registerTable">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'actions'">
-          <v-btn @click="onEdit(record)">编辑</v-btn>
-          <v-btn @click="onDelete(record)">删除</v-btn>
-          <v-btn>新增下级</v-btn>
-        </template>
+      <template #actions="{ record }">
+        <v-btn @click="onEdit(record)">编辑</v-btn>
+        <v-btn @click="onDel(record)">删除</v-btn>
+        <v-btn>新增下级</v-btn>
       </template>
     </v-table>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
@@ -20,8 +18,9 @@
 
 <script>
 import { onMounted, ref, reactive } from 'vue';
-import { ApiGetOrgPage } from '@mall-common/api/org';
+import { ApiGetOrgPage, ApiDelOrg } from '@mall-common/api/org';
 import useTable from '@mall-common/hooks/useTable';
+import useModal from '@mall-common/hooks/useModal';
 import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },
@@ -29,6 +28,7 @@ export default {
     const model = reactive({});
     const detail = ref();
     const visible = ref(false);
+    const modal = useModal();
     const [registerTable, { reload }] = useTable({
       rowKey: 'id',
       request: ApiGetOrgPage,
@@ -73,7 +73,9 @@ export default {
       visible.value = true;
     };
 
-    const onDelete = () => {};
+    const onDel = (row) => {
+      modal.del('机构', ApiDelOrg, { ids: row.id }, () => reload());
+    };
 
     const actions = [
       {
@@ -101,7 +103,7 @@ export default {
       reload,
       registerTable,
       onEdit,
-      onDelete,
+      onDel,
       actions,
     };
   },
