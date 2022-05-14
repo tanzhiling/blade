@@ -1,11 +1,18 @@
 <template>
   <v-card :actions="actions">
-    <v-form @register="registerForm" />
+    <v-query :model="model" @on-search="reload" @on-reset="reload">
+      <v-query-item label="字典名称" name="dictValue">
+        <a-input v-model:value="model.dictValue" allow-clear />
+      </v-query-item>
+      <v-query-item label="字典编码" name="code">
+        <a-input v-model:value="model.code" allow-clear />
+      </v-query-item>
+    </v-query>
     <v-table @register="registerTable">
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
-        <v-btn>新增下级</v-btn>
+        <v-btn @click="onDel(record)">字典配置</v-btn>
       </template>
     </v-table>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
@@ -13,12 +20,12 @@
 </template>
 <script>
 import { onMounted, ref, reactive } from 'vue';
-import { ApiGetOrgPage, ApiDelOrg } from '@mall-common/api/org';
-import useForm from '@mall-common/hooks/useForm';
+import { ApiGetDict } from '@mall-common/api/global';
+import { ApiGetDictPage, ApiDelDict } from '@mall-common/api/dict';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
+import useRequest from '@mall-common/hooks/useRequest';
 import iDrawer from './drawer.vue';
-
 export default {
   components: { iDrawer },
   setup() {
@@ -28,21 +35,17 @@ export default {
     const modal = useModal();
     const [registerTable, { reload }] = useTable({
       rowKey: 'id',
-      request: ApiGetOrgPage,
-      isPage: false,
+      request: ApiGetDictPage,
+      isPage: true,
       params: model,
       columns: [
         {
-          title: '机构名称',
-          dataIndex: 'deptName',
+          title: '字典名称',
+          dataIndex: 'dictValue',
         },
         {
-          title: '机构全称',
-          dataIndex: 'fullName',
-        },
-        {
-          title: '机构类型',
-          dataIndex: 'deptCategoryName',
+          title: '字典编码',
+          dataIndex: 'code',
         },
         {
           title: '排序',
@@ -59,18 +62,10 @@ export default {
         },
       ],
     });
-    const [registerForm] = useForm({
-      globalSpan: 6,
-      search: true,
-      schemas: [
-        {
-          label: '机构名称',
-          field: 'deptName',
-          component: 'Input',
-        },
-      ],
-      onSearch: reload,
-      onReset: reload,
+    const [dict] = useRequest({
+      request: ApiGetDict,
+      params: { code: 'post_category' },
+      isInit: true,
     });
 
     const onAdd = () => {
@@ -84,12 +79,12 @@ export default {
     };
 
     const onDel = (row) => {
-      modal.del('机构', ApiDelOrg, { ids: row.id }, () => reload());
+      modal.del('字典', ApiDelDict, { ids: row.id }, () => reload());
     };
 
     const actions = [
       {
-        text: '新增机构',
+        text: '新增字典',
         onClick: onAdd,
       },
       {
@@ -111,7 +106,6 @@ export default {
       detail,
       visible,
       reload,
-      registerForm,
       registerTable,
       onEdit,
       onDel,

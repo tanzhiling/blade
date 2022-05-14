@@ -1,3 +1,3 @@
 <template>
-  <div>111</div>
+  <v-exception type="404" />
 </template>

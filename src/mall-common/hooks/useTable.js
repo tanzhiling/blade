@@ -13,8 +13,7 @@ const useTable = (tableProps) => {
         loadedRef.value = null;
       });
 
-    if (unref(loadedRef) && isProdMode() && instance === unref(tableRef))
-      return;
+    if (unref(loadedRef) && isProdMode() && instance === unref(tableRef)) return;
 
     tableRef.value = instance;
     tableProps && instance.setProps(getDynamicProps(tableProps));
@@ -30,7 +29,7 @@ const useTable = (tableProps) => {
       {
         immediate: true,
         deep: true,
-      }
+      },
     );
   }
 
@@ -38,7 +37,7 @@ const useTable = (tableProps) => {
     const table = unref(tableRef);
     if (!table) {
       console.error(
-        'The table instance has not been obtained yet, please make sure the table is presented when performing the table operation!'
+        'The table instance has not been obtained yet, please make sure the table is presented when performing the table operation!',
       );
     }
     return table;

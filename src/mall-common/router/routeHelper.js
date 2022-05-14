@@ -49,7 +49,7 @@ export function dynamicImport(dynamicViewsModules, component) {
   }
   if (matchKeys?.length > 1) {
     console.warn(
-      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure'
+      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure',
     );
   }
 }

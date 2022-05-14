@@ -21,13 +21,13 @@
       </template>
       <template #category="{ record }">
         <a-tag v-if="record.category === 1" color="blue">菜单</a-tag>
-        <a-tag v-else-if="record.category === 2" color="blue">页面</a-tag>
-        <a-tag v-else-if="record.category === 3" color="blue">按钮</a-tag>
+        <a-tag v-else-if="record.category === 2" color="purple">分组</a-tag>
+        <a-tag v-else-if="record.category === 3" color="red">权限</a-tag>
       </template>
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
-        <v-btn>新增下级</v-btn>
+        <v-btn @click="onAddChild(record)">新增下级</v-btn>
       </template>
     </v-table>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
@@ -67,7 +67,7 @@ export default {
           dataIndex: 'path',
         },
         {
-          title: '页面路径',
+          title: '文件路径',
           dataIndex: 'page',
         },
         {
@@ -97,6 +97,11 @@ export default {
 
     const onAdd = () => {
       detail.value = {};
+      visible.value = true;
+    };
+
+    const onAddChild = (row) => {
+      detail.value = { parentId: row.id };
       visible.value = true;
     };
 
@@ -135,6 +140,7 @@ export default {
       reload,
       registerTable,
       actions,
+      onAddChild,
       onEdit,
       onDel,
     };

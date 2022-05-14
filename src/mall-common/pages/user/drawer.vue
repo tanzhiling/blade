@@ -113,9 +113,9 @@ import { validatePwd } from '@mall-common/libs/validate';
 import useRequest from '@mall-common/hooks/useRequest';
 export default {
   props: {
+    visible: Boolean,
     data: Object,
     deptData: Array,
-    visible: Boolean,
   },
   emits: ['update:visible', 'reload'],
   setup(props, { emit }) {

@@ -14,24 +14,27 @@
   .logo {
     height: 40px;
     line-height: 40px;
-    background: rgba(255, 255, 255, 0.1);
     margin: 10px;
-    color: @primary-color;
     font-size: 18px;
-    text-align: center;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    color: @primary-color;
+    img {
+      width: 28px;
+      height: 28px;
+      margin-right: 4px;
+    }
   }
   .nav {
     height: calc(~'100% - 60px');
     overflow: hidden auto;
     &-item {
-      font-size: 14px;
-      padding: 10px;
+      font-size: @font-size-base + 2px;
+      padding: 14px;
       &-link {
         display: flex;
         position: relative;
-        color: @text-color-secondary-dark;
+        color: rgba(255, 255, 255, 0.4);
       }
       &-active {
         color: @white;
@@ -49,7 +52,7 @@
         }
       }
       .icon {
-        width: 20px;
+        width: 24px;
       }
     }
     &::-webkit-scrollbar {
@@ -97,7 +100,7 @@
   overflow: hidden;
   &-sub-sider {
     flex-shrink: 0;
-    width: 120px;
+    width: 140px;
     overflow: hidden;
     position: relative;
     padding: 16px 0;
@@ -108,11 +111,11 @@
       &-item {
         &-link {
           display: flex;
-          padding: 12px 5px 12px 10px;
+          padding: 10px 5px 10px 10px;
           color: @text-color;
-          font-size: 12px;
+          font-size: @font-size-base;
           .icon {
-            width: 16px;
+            margin-right: 4px;
           }
           .text {
             flex: 1;

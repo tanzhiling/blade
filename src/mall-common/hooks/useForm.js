@@ -40,67 +40,38 @@ const useForm = (props) => {
   }
 
   const methods = {
-    scrollToField: async (name, options) => {
+    model: async () => {
       const form = await getForm();
-      form.scrollToField(name, options);
+      return form.model;
     },
-    setProps: async (formProps) => {
+    setProp: async (formProps) => {
       const form = await getForm();
       form.setProps(formProps);
     },
-
-    updateSchema: async (data) => {
+    validate: async (nameList) => {
       const form = await getForm();
-      form.updateSchema(data);
+      return form.validate(nameList);
     },
-
-    resetSchema: async (data) => {
+    validateFields: async (nameList) => {
       const form = await getForm();
-      form.resetSchema(data);
+      return form.validateFields(nameList);
     },
-
     clearValidate: async (name) => {
       const form = await getForm();
       form.clearValidate(name);
     },
-
     resetFields: async () => {
       getForm().then(async (form) => {
         await form.resetFields();
       });
     },
-
-    removeSchemaByFiled: async (field) => {
-      unref(formRef)?.removeSchemaByFiled(field);
-    },
-
-    getFieldsValue: () => {
-      return unref(formRef)?.getFieldsValue();
-    },
-
     setFieldsValue: async (values) => {
       const form = await getForm();
       form.setFieldsValue(values);
     },
-
-    appendSchemaByField: async (schema, prefixField, first) => {
+    scrollToField: async (name, options) => {
       const form = await getForm();
-      form.appendSchemaByField(schema, prefixField, first);
-    },
-
-    submit: async () => {
-      const form = await getForm();
-      return form.submit();
-    },
-
-    validate: async (nameList) => {
-      const form = await getForm();
-      return form.validate(nameList);
-    },
-
-    validateFields: async (nameList) => {
-      const form = await getForm();
-      return form.validateFields(nameList);
+      form.scrollToField(name, options);
     },
   };
 

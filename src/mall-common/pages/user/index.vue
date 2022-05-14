@@ -64,7 +64,7 @@ export default {
         },
         {
           title: '所属角色',
-          key: 'roleName',
+          dataIndex: 'roleName',
         },
         {
           title: '所属部门',

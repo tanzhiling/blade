@@ -1,7 +1,9 @@
 <template>
-  <a-layout-sider class="v-layout-sider" :width="120" :trigger="null">
+  <a-layout-sider class="v-layout-sider" :width="140" :trigger="null">
     <div class="logo">
-      <span v-if="!collapsed">{{ Setting.layoutTitle }}</span>
+      <!-- <span v-if="!collapsed">{{ Setting.layoutTitle }}</span> -->
+      <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+      <span>{{ Setting.layoutTitle }}</span>
     </div>
     <div class="nav">
       <div v-for="(item, index) in menu" :key="index" class="nav-item">

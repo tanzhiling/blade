@@ -1,28 +1,6 @@
 <template>
   <a-drawer :visible="show" :width="520" :title="title" :mask-closable="false" @close="onClose">
-    <a-form ref="formRef" autocomplete="off" :label-col="{ span: 4 }" :model="model" :rules="rules">
-      <a-form-item label="机构名称" name="deptName">
-        <a-input v-model:value="model.deptName" allow-clear />
-      </a-form-item>
-      <a-form-item label="机构全称" name="fullName">
-        <a-input v-model:value="model.fullName" allow-clear />
-      </a-form-item>
-      <a-form-item label="上级机构" name="parentId">
-        <a-tree-select v-model:value="model.parentId" :tree-data="tree" />
-      </a-form-item>
-      <a-form-item label="机构类型" name="deptCategory">
-        <a-radio-group v-model:value="model.deptCategory">
-          <a-radio :value="1">公司</a-radio>
-          <a-radio :value="2">部门</a-radio>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item :span="12" label="排序" name="sort">
-        <a-input-number v-model:value="model.sort" :min="0" :step="10" />
-      </a-form-item>
-      <a-form-item label="备注" name="remark">
-        <a-textarea v-model:value="model.remark" :rows="4" />
-      </a-form-item>
-    </a-form>
+    <v-form @register="registerForm" />
     <template #footer>
       <a-space>
         <a-button @click="onClose">取消</a-button>
@@ -33,26 +11,70 @@
 </template>
 <script>
 import { message } from 'ant-design-vue';
-import { computed, reactive, ref, unref, watch } from 'vue';
+import { computed, ref, unref, watch } from 'vue';
 import { ApiGetOrgTree, ApiSaveOrg } from '@mall-common/api/org';
+import useForm from '@mall-common/hooks/useForm';
 import useRequest from '@mall-common/hooks/useRequest';
 export default {
   props: {
-    data: Object,
     visible: Boolean,
+    data: Object,
   },
   emits: ['update:visible', 'reload'],
   setup(props, { emit }) {
-    const formRef = ref();
     const show = ref(false);
     const loading = ref(false);
-    const model = ref({});
-    const rules = reactive({
-      deptName: [{ required: true, message: '请输入机构名称' }],
-      deptCategory: [{ required: true, message: '请选择机构类型' }],
-    });
     const title = computed(() => (props.data?.id ? '编辑机构' : '新增机构'));
     const [tree] = useRequest({ request: ApiGetOrgTree, isInit: true });
+
+    const [registerForm, { model, validate, resetFields, setFieldsValue }] = useForm({
+      labelCol: { span: 4 },
+      schemas: [
+        {
+          label: '机构名称',
+          field: 'deptName',
+          component: 'Input',
+          rules: [{ required: true, message: '请输入机构名称' }],
+        },
+        {
+          label: '机构全称',
+          field: 'fullName',
+          component: 'Input',
+        },
+        {
+          label: '上级机构',
+          field: 'parentId',
+          component: 'TreeSelect',
+          treeData: tree,
+        },
+        {
+          label: '机构类型',
+          field: 'deptCategory',
+          component: 'Radio',
+          rules: [{ required: true, message: '请选择机构类型' }],
+          options: [
+            {
+              label: '公司',
+              value: '1',
+            },
+            {
+              label: '部门',
+              value: '2',
+            },
+          ],
+        },
+        {
+          label: '排序',
+          field: 'sort',
+          component: 'InputNumber',
+        },
+        {
+          label: '备注',
+          field: 'remark',
+          component: 'Textarea',
+        },
+      ],
+    });
 
     watch(
       () => show.value,
@@ -65,19 +87,18 @@ export default {
       () => props.visible,
       (val) => {
         const { data } = unref(props);
-        model.value = { ...data };
+        setFieldsValue(data);
         show.value = val;
       },
     );
 
     const onClose = () => {
-      model.value = {};
-      formRef.value.resetFields();
+      resetFields();
       show.value = false;
     };
 
     const onSubmit = () => {
-      formRef.value.validate().then(async () => {
+      validate().then(async () => {
         loading.value = true;
         const { success, msg } = await ApiSaveOrg(model.value);
         loading.value = false;
@@ -90,12 +111,9 @@ export default {
     };
 
     return {
-      formRef,
+      registerForm,
       show,
-      model,
-      rules,
       title,
-      tree,
       loading,
       onClose,
       onSubmit,

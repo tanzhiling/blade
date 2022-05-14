@@ -3,8 +3,8 @@
     <div class="nav">
       <div v-for="(item, index) in subMenu" :key="index" class="nav-item">
         <router-link :to="item.path" class="nav-item-link" active-class="nav-item-active">
-          <span class="icon">
-            <v-icon v-if="item.source" :type="item.source" />
+          <span v-if="item.source" class="icon">
+            <v-icon :type="item.source" />
           </span>
           <span class="text"> {{ item.name }}</span>
           <span>

@@ -1,14 +1,6 @@
 import BasicLayout from '@mall-common/layouts/default/index.vue';
 
 export const BasicRoutes = [
-  {
-    name: '404',
-    path: '/404',
-    meta: {
-      title: '找不到页面',
-    },
-    component: () => import('@mall-common/pages/error/404.vue'),
-  },
   // 登录
   {
     path: '/login',
@@ -26,6 +18,14 @@ export const BasicRoutes = [
     },
     component: BasicLayout,
     children: [
+      {
+        name: '404',
+        path: '/404',
+        meta: {
+          title: '找不到页面',
+        },
+        component: () => import('@mall-common/pages/error/404.vue'),
+      },
       {
         path: '/home',
         name: 'home',
