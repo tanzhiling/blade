@@ -30,7 +30,7 @@ const useTableScroll = (propsRef, tableElRef, daataSource) => {
 
   const calcTableHeight = () => {
     const tableData = unref(daataSource);
-    const { isPage } = unref(propsRef);
+    const { page } = unref(propsRef);
     const table = unref(tableElRef);
     if (!table) return;
     const tableEl = table.$el;
@@ -41,7 +41,7 @@ const useTableScroll = (propsRef, tableElRef, daataSource) => {
     }
     const { top } = tableEl.getBoundingClientRect();
     const tablePadding = 32;
-    const paginationHeight = isPage && tableData.length > 0 ? 34 : 0;
+    const paginationHeight = page && tableData.length > 0 ? 34 : 0;
     const headerHeight = 43;
     const currentHeight = document.body.clientHeight - top - tablePadding - paginationHeight;
     bodyEl.style.height = currentHeight + 'px';

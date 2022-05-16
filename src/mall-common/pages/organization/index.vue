@@ -1,6 +1,6 @@
 <template>
   <v-card :actions="actions">
-    <v-form @register="registerForm" />
+    <v-form search @register="registerForm" />
     <v-table @register="registerTable">
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
@@ -12,7 +12,7 @@
   </v-card>
 </template>
 <script>
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ApiGetOrgPage, ApiDelOrg } from '@mall-common/api/org';
 import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
@@ -22,15 +22,12 @@ import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },
   setup() {
-    const model = reactive({});
     const detail = ref();
     const visible = ref(false);
     const modal = useModal();
     const [registerTable, { reload }] = useTable({
       rowKey: 'id',
       request: ApiGetOrgPage,
-      isPage: false,
-      params: model,
       columns: [
         {
           title: '机构名称',
@@ -61,7 +58,6 @@ export default {
     });
     const [registerForm] = useForm({
       globalSpan: 6,
-      search: true,
       schemas: [
         {
           label: '机构名称',
@@ -69,8 +65,7 @@ export default {
           component: 'Input',
         },
       ],
-      onSearch: reload,
-      onReset: reload,
+      onReload: reload,
     });
 
     const onAdd = () => {
@@ -107,7 +102,6 @@ export default {
     });
 
     return {
-      model,
       detail,
       visible,
       reload,

@@ -1,17 +1,25 @@
 <template>
-  <div class="v-layout-content-sub-sider">
+  <div v-if="subMenu?.length" class="v-layout-content-sub-sider">
     <div class="nav">
-      <div v-for="(item, index) in subMenu" :key="index" class="nav-item">
-        <router-link :to="item.path" class="nav-item-link" active-class="nav-item-active">
+      <template v-for="(item, index) in subMenu" :key="index">
+        <div v-if="item.category === 2" class="nav-group">
           <span v-if="item.source" class="icon">
             <v-icon :type="item.source" />
           </span>
           <span class="text"> {{ item.name }}</span>
-          <span>
-            <v-icon type="icon-caret-right" />
-          </span>
-        </router-link>
-      </div>
+        </div>
+        <div v-else class="nav-item">
+          <router-link :to="item.path" class="nav-item-link" active-class="nav-item-active">
+            <span v-if="item.source" class="icon">
+              <v-icon :type="item.source" />
+            </span>
+            <span class="text"> {{ item.name }}</span>
+            <span>
+              <v-icon type="icon-caret-right" />
+            </span>
+          </router-link>
+        </div>
+      </template>
     </div>
   </div>
 </template>

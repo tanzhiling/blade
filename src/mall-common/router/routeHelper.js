@@ -1,7 +1,7 @@
 const modules = import.meta.glob('../../mall-**/pages/**/*.vue');
 
 // 生成路由
-export function createRoute(item, parent) {
+export function createRoute(item) {
   const route = {
     path: item.path,
     name: item.code,
@@ -13,20 +13,20 @@ export function createRoute(item, parent) {
     closable: true,
     showTab: true,
     icon: item.icon,
-    header: parent.code,
+    parentId: item.parentId,
   };
   route.meta = meta;
   return route;
 }
 
 // 获取请求菜单 生成路由
-export function getRequestRoutes(data, parent = {}) {
+export function getRequestRoutes(data) {
   let arr = [];
   if (Array.isArray(data)) {
     data.forEach((item) => {
-      if (item.page) arr.push(createRoute(item, parent));
+      if (item.page) arr.push(createRoute(item));
       if (item.children && item.children.length > 0) {
-        arr = arr.concat(getRequestRoutes(item.children, item));
+        arr = arr.concat(getRequestRoutes(item.children));
       }
     });
   }

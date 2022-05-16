@@ -33,13 +33,13 @@ export default {
     const { getScrollRef, redoHeight } = useScroll(getProps, tableElRef, dataSource);
 
     const getBindValues = computed(() => {
-      const { isPage } = unref(getProps);
+      const { page } = unref(getProps);
       return {
         ...unref(getProps),
         scroll: unref(getScrollRef),
         loading: unref(loading),
         dataSource: unref(dataSource),
-        pagination: isPage ? unref(pagination) : false,
+        pagination: page ? unref(pagination) : page,
       };
     });
 

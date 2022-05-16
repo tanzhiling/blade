@@ -32,7 +32,7 @@
       <a-form-item label="菜单编码" name="code">
         <a-input v-model:value="model.code" allow-clear />
       </a-form-item>
-      <a-form-item v-if="model.category === 1" label="路由地址" name="path">
+      <a-form-item v-if="model.category !== 2" label="路由地址" name="path">
         <a-input v-model:value="model.path" allow-clear />
       </a-form-item>
       <a-form-item v-if="model.category !== 2" label="文件路径" name="page">
@@ -75,7 +75,7 @@ export default {
     const rules = reactive({
       name: [{ required: true, message: '请输入菜单名称' }],
       code: [{ required: true, message: '请输入菜单编码' }],
-      path: [{ required: true, message: '请输入路由地址' }],
+      // path: [{ required: true, message: '请输入路由地址' }],
       category: [{ required: true, message: '请选择菜单类型' }],
     });
     const title = computed(() => (props.data?.id ? '编辑菜单' : '新增菜单'));

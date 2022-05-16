@@ -38,13 +38,18 @@
                   </template>
                   <template v-if="schema.component === 'Select'">
                     <a-select v-model:value="model[schema.field]" allow-clear>
-                      <a-select-option
-                        v-for="(item, _index) in schema.options"
-                        :key="_index"
-                        :value="item.value"
-                      >
-                        {{ item.label }}
-                      </a-select-option>
+                      <template v-for="(item, _index) in schema.options" :key="_index">
+                        <template v-if="schema.optionsField">
+                          <a-select-option :value="item[schema.optionsField.value]">
+                            {{ item[schema.optionsField.label] }}
+                          </a-select-option>
+                        </template>
+                        <template v-else>
+                          <a-select-option :value="item.value">
+                            {{ item.label }}
+                          </a-select-option>
+                        </template>
+                      </template>
                     </a-select>
                   </template>
                   <template v-if="schema.component === 'Radio'">
@@ -87,8 +92,8 @@
     </a-col>
   </a-row>
 </template>
-<script>
-import { ref, unref, computed, watch, onMounted } from 'vue';
+<script lang="jsx">
+import { ref, unref, computed, onMounted } from 'vue';
 import BasicProps from './props';
 export default {
   props: BasicProps,
@@ -138,14 +143,14 @@ export default {
     });
 
     const onSubmit = () => {
-      const { onSearch } = unref(getProps);
-      if (onSearch) onSearch(model.value);
+      const { onReload } = unref(getProps);
+      if (onReload) onReload(model.value);
     };
 
     const onReset = () => {
-      const { onReset } = unref(getProps);
+      const { onReload } = unref(getProps);
       formRef.value.resetFields();
-      if (onReset) onReset(model.value);
+      if (onReload) onReload(model.value);
     };
 
     function setProps(props) {

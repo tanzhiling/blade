@@ -1,5 +1,7 @@
 import { ApiMenuRoutes } from '@mall-common/api/menu';
 import { getRequestRoutes } from '@mall-common/router/routeHelper';
+import { getRequestMenus } from '@mall-common/router/menuHelper';
+import store from '@mall-common/libs/store';
 
 export default {
   namespaced: true,
@@ -41,15 +43,17 @@ export default {
     generateRoutes: async ({ commit, state }) => {
       return new Promise((resolve) => {
         if (state.routes.length === 0) {
-          ApiMenuRoutes().then((res) => {
+          const info = store.get('userInfo');
+          ApiMenuRoutes({ roleId: info.role_id }).then((res) => {
             const { success, data } = res;
             if (success) {
               state.routes = data;
             }
             const routes = getRequestRoutes(state.routes);
-            commit('setMenu', data);
-            commit('setSubMenu', data[0].children);
+            const menu = getRequestMenus(data);
+            commit('setMenu', menu);
             commit('setRoutes', routes);
+            store.set('menu', menu);
             resolve(routes);
           });
         }
@@ -57,8 +61,13 @@ export default {
     },
     updatePath: async ({ commit }, route) => {
       const { path, meta } = route;
+      const menu = store.get('menu');
       if (path) commit('setActivePath', route.path);
-      if (meta?.header) commit('setHeaderName', meta.header);
+      if (meta?.parentId) {
+        const current = menu.find((item) => item.id === meta.parentId);
+        commit('setHeaderName', current.code);
+        if (current?.children?.length) commit('setSubMenu', current.children);
+      }
     },
   },
 };

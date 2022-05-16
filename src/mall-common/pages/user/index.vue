@@ -5,15 +5,8 @@
         <a-tree show-icon :tree-data="deptData" />
       </a-col>
       <a-col :span="20">
-        <v-query :model="model" @on-search="reload" @on-reset="reload">
-          <v-query-item label="用户账号" name="account">
-            <a-input v-model:value="model.account" allow-clear />
-          </v-query-item>
-          <v-query-item label="用户姓名" name="realName">
-            <a-input v-model:value="model.realName" allow-clear />
-          </v-query-item>
-        </v-query>
-        <v-table @register="registerTable">
+        <v-form search @register="registerForm" />
+        <v-table page @register="registerTable">
           <template #sexName="{ record }">
             <a-tag v-if="record.sexName === 1" color="blue">男</a-tag>
             <a-tag v-else-if="record.sexName === 2" color="blue">女</a-tag>
@@ -30,9 +23,10 @@
   </v-card>
 </template>
 <script>
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ApiGetOrgTree } from '@mall-common/api/org';
 import { ApiGetUserPage, ApiDelUser } from '@mall-common/api/user';
+import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
 import useRequest from '@mall-common/hooks/useRequest';
@@ -40,7 +34,6 @@ import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },
   setup() {
-    const model = reactive({});
     const detail = ref();
     const visible = ref(false);
     const modal = useModal();
@@ -51,8 +44,6 @@ export default {
     });
     const [registerTable, { reload }] = useTable({
       request: ApiGetUserPage,
-      isPage: true,
-      params: model,
       columns: [
         {
           title: '登录账号',
@@ -86,6 +77,22 @@ export default {
           width: 170,
         },
       ],
+    });
+    const [registerForm] = useForm({
+      globalSpan: 8,
+      schemas: [
+        {
+          label: '用户账号',
+          field: 'account',
+          component: 'Input',
+        },
+        {
+          label: '用户姓名',
+          field: 'realName',
+          component: 'Input',
+        },
+      ],
+      onReload: reload,
     });
 
     const onAdd = () => {
@@ -123,11 +130,11 @@ export default {
     });
 
     return {
-      model,
       detail,
       visible,
       reload,
       deptData,
+      registerForm,
       registerTable,
       onEdit,
       onDel,

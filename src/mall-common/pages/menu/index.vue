@@ -1,20 +1,6 @@
 <template>
   <v-card :actions="actions">
-    <v-query :model="model" @on-search="reload" @on-reset="reload">
-      <v-query-item label="菜单名称" name="name">
-        <a-input v-model:value="model.name" allow-clear />
-      </v-query-item>
-      <v-query-item label="菜单编码" name="code">
-        <a-input v-model:value="model.code" allow-clear />
-      </v-query-item>
-      <v-query-item label="菜单类型" name="category">
-        <a-select v-model:value="model.category" allow-clear>
-          <a-select-option :value="1">菜单</a-select-option>
-          <a-select-option :value="2">页面</a-select-option>
-          <a-select-option :value="3">按钮</a-select-option>
-        </a-select>
-      </v-query-item>
-    </v-query>
+    <v-form search @register="registerForm" />
     <v-table @register="registerTable">
       <template #source="{ record }">
         <v-icon :type="record.source" :size="18" />
@@ -35,23 +21,21 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ApiGetMenuLazyList, ApiDelMenu } from '@mall-common/api/menu';
+import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
 import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },
   setup() {
-    const model = reactive({});
     const detail = ref();
     const visible = ref(false);
     const modal = useModal();
     const [registerTable, { reload }] = useTable({
       rowKey: 'id',
       request: ApiGetMenuLazyList,
-      isPage: false,
-      params: model,
       columns: [
         {
           title: '菜单名称',
@@ -94,6 +78,41 @@ export default {
         },
       ],
     });
+    const [registerForm] = useForm({
+      globalSpan: 6,
+      schemas: [
+        {
+          label: '菜单名称',
+          field: 'name',
+          component: 'Input',
+        },
+        {
+          label: '菜单编码',
+          field: 'code',
+          component: 'Input',
+        },
+        {
+          label: '菜单类型',
+          field: 'category',
+          component: 'Select',
+          options: [
+            {
+              label: '菜单',
+              value: 1,
+            },
+            {
+              label: '分组',
+              value: 2,
+            },
+            {
+              label: '按钮',
+              value: 3,
+            },
+          ],
+        },
+      ],
+      onReload: reload,
+    });
 
     const onAdd = () => {
       detail.value = {};
@@ -134,10 +153,10 @@ export default {
     });
 
     return {
-      model,
       detail,
       visible,
       reload,
+      registerForm,
       registerTable,
       actions,
       onAddChild,

@@ -1,4 +1,8 @@
 const basicProps = {
+  page: {
+    type: Boolean,
+    default: false,
+  },
   bordered: {
     type: Boolean,
     default: true,

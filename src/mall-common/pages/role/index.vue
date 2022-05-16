@@ -1,52 +1,43 @@
 <template>
   <v-card :actions="actions">
-    <v-form search @register="registerForm" />
-    <v-table page @register="registerTable">
-      <template #category="{ record }">
-        {{ dict && dict.find((item) => item.dictKey === String(record.category))?.dictValue }}
-      </template>
+    <v-form @register="registerForm" />
+    <v-table @register="registerTable">
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
+        <v-btn>新增下级</v-btn>
       </template>
     </v-table>
-    <i-drawer v-model:visible="visible" :dict="dict" :data="detail" @reload="reload" />
+    <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
   </v-card>
 </template>
 <script>
 import { onMounted, ref } from 'vue';
-import { ApiGetDict } from '@mall-common/api/global';
-import { ApiGetRostPage, ApiDelPost } from '@mall-common/api/post';
+import { ApiGetRoleList, ApiDelRole } from '@mall-common/api/role';
 import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
-import useRequest from '@mall-common/hooks/useRequest';
 import iDrawer from './drawer.vue';
+
 export default {
   components: { iDrawer },
   setup() {
+    const model = ref();
     const detail = ref();
     const visible = ref(false);
     const modal = useModal();
-    const [dict] = useRequest({
-      request: ApiGetDict,
-      params: { code: 'post_category' },
-      isInit: true,
-    });
     const [registerTable, { reload }] = useTable({
-      request: ApiGetRostPage,
+      rowKey: 'id',
+      request: ApiGetRoleList,
+      params: model,
       columns: [
         {
-          title: '岗位名称',
-          dataIndex: 'postName',
+          title: '角色名称',
+          dataIndex: 'roleName',
         },
         {
-          title: '岗位编码',
-          dataIndex: 'postCode',
-        },
-        {
-          title: '岗位类型',
-          dataIndex: 'category',
+          title: '角色编码',
+          dataIndex: 'roleAlias',
         },
         {
           title: '排序',
@@ -59,35 +50,27 @@ export default {
         {
           title: '操作',
           dataIndex: 'actions',
-          width: 100,
+          width: 170,
         },
       ],
     });
     const [registerForm] = useForm({
       globalSpan: 6,
+      search: true,
       schemas: [
         {
-          label: '岗位名称',
-          field: 'postName',
+          label: '角色名称',
+          field: 'roleName',
           component: 'Input',
         },
         {
-          label: '岗位编码',
-          field: 'postCode',
+          label: '角色编码',
+          field: 'roleAlias',
           component: 'Input',
-        },
-        {
-          label: '岗位类型',
-          field: 'category',
-          component: 'Select',
-          options: dict,
-          optionsField: {
-            label: 'dictValue',
-            value: 'dictKey',
-          },
         },
       ],
-      onReload: reload,
+      onSearch: reload,
+      onReset: reload,
     });
 
     const onAdd = () => {
@@ -101,12 +84,12 @@ export default {
     };
 
     const onDel = (row) => {
-      modal.del('岗位', ApiDelPost, { ids: row.id }, () => reload());
+      modal.del('角色', ApiDelRole, { ids: row.id }, () => reload());
     };
 
     const actions = [
       {
-        text: '新增岗位',
+        text: '新增角色',
         onClick: onAdd,
       },
       {
@@ -124,6 +107,7 @@ export default {
     });
 
     return {
+      model,
       detail,
       visible,
       reload,
@@ -132,7 +116,6 @@ export default {
       onEdit,
       onDel,
       actions,
-      dict,
     };
   },
 };

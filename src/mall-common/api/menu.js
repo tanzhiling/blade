@@ -8,9 +8,9 @@ export const ApiTopMenu = (params) => {
   });
 };
 
-// 菜单路由
+// 获取用户菜单路由
 export const ApiMenuRoutes = (params) => {
-  return request('/blade-system/menu/routes', {
+  return request('/blade-system/menu/menu-list-by-user', {
     method: 'get',
     params,
   });

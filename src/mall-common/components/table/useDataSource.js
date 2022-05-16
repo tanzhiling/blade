@@ -20,7 +20,7 @@ const useDataSource = (propsRef) => {
   };
 
   const reload = async (payload) => {
-    const { request, params, isPage } = unref(propsRef);
+    const { request, params, page } = unref(propsRef);
     const { current, pageSize } = unref(pagination);
     loading.value = true;
     const { success, data } = await request({
@@ -31,7 +31,7 @@ const useDataSource = (propsRef) => {
     });
     loading.value = false;
     if (success) {
-      if (isPage) {
+      if (page) {
         const { records, current, size, total } = data;
         dataSource.value = records;
         pagination.current = current;

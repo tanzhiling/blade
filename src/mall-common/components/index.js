@@ -6,8 +6,6 @@ import vTable from './table/index.vue';
 import vForm from './form/index.vue';
 import vIcon from './icon/index.vue';
 import vIconSelect from './icon-select/index.vue';
-import vQuery from './query/index.vue';
-import vQueryItem from './query/item.vue';
 
 export default {
   async install(Vue) {
@@ -18,7 +16,5 @@ export default {
     Vue.component('VForm', vForm);
     Vue.component('VIcon', vIcon);
     Vue.component('VIconSelect', vIconSelect);
-    Vue.component('VQuery', vQuery);
-    Vue.component('VQueryItem', vQueryItem);
   },
 };
