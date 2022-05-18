@@ -5,42 +5,39 @@
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
-        <v-btn @click="onConfig(record)">字典配置</v-btn>
       </template>
     </BasicTable>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
   </v-card>
 </template>
 <script>
-import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { ApiGetDictPage, ApiDelDict } from '@mall-common/api/dict';
+import { ApiGetParamPage, ApiDelParam } from '@mall-common/api/param';
 import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
+import useRequest from '@mall-common/hooks/useRequest';
 import iDrawer from './drawer.vue';
-
 export default {
   components: { iDrawer },
   setup() {
-    const router = useRouter();
     const detail = ref();
     const visible = ref(false);
     const modal = useModal();
     const [registerTable, { reload }] = useTable({
-      request: ApiGetDictPage,
+      request: ApiGetParamPage,
       columns: [
         {
-          title: '字典名称',
-          dataIndex: 'dictValue',
+          title: '参数名称',
+          dataIndex: 'paramName',
         },
         {
-          title: '字典编码',
-          dataIndex: 'code',
+          title: '参数键名',
+          dataIndex: 'paramKey',
         },
         {
-          title: '排序',
-          dataIndex: 'sort',
+          title: '参数键值',
+          dataIndex: 'paramValue',
         },
         {
           title: '备注',
@@ -49,7 +46,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'actions',
-          width: 170,
+          width: 100,
         },
       ],
     });
@@ -57,13 +54,13 @@ export default {
       globalSpan: 6,
       schemas: [
         {
-          label: '字典名称',
-          field: 'dictValue',
+          label: '参数名称',
+          field: 'paramName',
           component: 'Input',
         },
         {
-          label: '字典编码',
-          field: 'code',
+          label: '参数键名',
+          field: 'paramKey',
           component: 'Input',
         },
       ],
@@ -80,20 +77,13 @@ export default {
       visible.value = true;
     };
 
-    const onConfig = (row) => {
-      router.push({
-        path: '/system/dict/data',
-        query: { id: row.id, title: row.dictValue, code: row.code },
-      });
-    };
-
     const onDel = (row) => {
-      modal.del('字典', ApiDelDict, { ids: row.id }, () => reload());
+      modal.del('参数', ApiDelParam, { ids: row.id }, () => reload());
     };
 
     const actions = [
       {
-        text: '新增字典',
+        text: '新增参数',
         onClick: onAdd,
       },
       {
@@ -118,7 +108,6 @@ export default {
       registerTable,
       onEdit,
       onDel,
-      onConfig,
       actions,
     };
   },

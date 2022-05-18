@@ -14,7 +14,7 @@
 <script>
 import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { ApiGetDictPage, ApiDelDict } from '@mall-common/api/dict';
+import { ApiGetDictPage, ApiDelDict } from '@mall-common/api/dictbiz';
 import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
@@ -82,7 +82,7 @@ export default {
 
     const onConfig = (row) => {
       router.push({
-        path: '/system/dict/data',
+        path: '/system/dictbiz/data',
         query: { id: row.id, title: row.dictValue, code: row.code },
       });
     };

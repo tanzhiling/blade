@@ -1,20 +1,19 @@
 <template>
-  <v-card :actions="actions">
+  <v-card :title="title" :actions="actions">
     <BasicForm search @register="registerForm" />
-    <BasicTable page @register="registerTable">
+    <BasicTable @register="registerTable">
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
-        <v-btn @click="onConfig(record)">字典配置</v-btn>
       </template>
     </BasicTable>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
   </v-card>
 </template>
 <script>
-import { useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
-import { ApiGetDictPage, ApiDelDict } from '@mall-common/api/dict';
+import { useRoute } from 'vue-router';
+import { onMounted, computed, ref, reactive } from 'vue';
+import { ApiGetDictData, ApiDelDict } from '@mall-common/api/dictbiz';
 import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
@@ -23,20 +22,22 @@ import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },
   setup() {
-    const router = useRouter();
+    const route = useRoute();
+    const params = reactive({ parentId: '', code: '' });
     const detail = ref();
     const visible = ref(false);
     const modal = useModal();
     const [registerTable, { reload }] = useTable({
-      request: ApiGetDictPage,
+      request: ApiGetDictData,
+      params,
       columns: [
         {
           title: '字典名称',
           dataIndex: 'dictValue',
         },
         {
-          title: '字典编码',
-          dataIndex: 'code',
+          title: '字典键值',
+          dataIndex: 'dictKey',
         },
         {
           title: '排序',
@@ -49,7 +50,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'actions',
-          width: 170,
+          width: 100,
         },
       ],
     });
@@ -62,8 +63,8 @@ export default {
           component: 'Input',
         },
         {
-          label: '字典编码',
-          field: 'code',
+          label: '字典键值',
+          field: 'dictKey',
           component: 'Input',
         },
       ],
@@ -78,13 +79,6 @@ export default {
     const onEdit = (row) => {
       detail.value = row;
       visible.value = true;
-    };
-
-    const onConfig = (row) => {
-      router.push({
-        path: '/system/dict/data',
-        query: { id: row.id, title: row.dictValue, code: row.code },
-      });
     };
 
     const onDel = (row) => {
@@ -106,11 +100,17 @@ export default {
       },
     ];
 
+    const title = computed(() => route.meta.title + '(' + route.query.title + ')');
+
     onMounted(() => {
+      const { id, code } = route.query;
+      params.parentId = id;
+      params.code = code;
       reload();
     });
 
     return {
+      title,
       detail,
       visible,
       reload,
@@ -118,7 +118,6 @@ export default {
       registerTable,
       onEdit,
       onDel,
-      onConfig,
       actions,
     };
   },

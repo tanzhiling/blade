@@ -1,6 +1,6 @@
 <template>
   <a-drawer :visible="show" :width="520" :title="title" :mask-closable="false" @close="onClose">
-    <v-form @register="registerForm" />
+    <BasicForm @register="registerForm" />
     <template #footer>
       <a-space>
         <a-button @click="onClose">取消</a-button>
@@ -11,7 +11,7 @@
 </template>
 <script>
 import { message } from 'ant-design-vue';
-import { computed, ref, unref, watch } from 'vue';
+import { computed, ref, unref, watch, nextTick } from 'vue';
 import { ApiSaveRole } from '@mall-common/api/role';
 import useForm from '@mall-common/hooks/useForm';
 export default {
@@ -59,8 +59,8 @@ export default {
       () => props.visible,
       (val) => {
         const { data } = unref(props);
-        setFieldsValue(data);
         show.value = val;
+        nextTick(() => setFieldsValue(data));
       },
     );
 

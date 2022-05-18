@@ -1,6 +1,6 @@
 <template>
   <a-drawer :visible="show" :width="520" :title="title" :mask-closable="false" @close="onClose">
-    <v-form @register="registerForm" />
+    <BasicForm @register="registerForm" />
     <template #footer>
       <a-space>
         <a-button @click="onClose">取消</a-button>
@@ -11,7 +11,7 @@
 </template>
 <script>
 import { message } from 'ant-design-vue';
-import { computed, ref, unref, watch } from 'vue';
+import { computed, nextTick, ref, unref, watch } from 'vue';
 import { ApiGetOrgTree, ApiSaveOrg } from '@mall-common/api/org';
 import useForm from '@mall-common/hooks/useForm';
 import useRequest from '@mall-common/hooks/useRequest';
@@ -27,7 +27,7 @@ export default {
     const title = computed(() => (props.data?.id ? '编辑机构' : '新增机构'));
     const [tree] = useRequest({ request: ApiGetOrgTree, isInit: true });
 
-    const [registerForm, { model, validate, resetFields, setFieldsValue }] = useForm({
+    const [registerForm, { validate, resetFields, setFieldsValue }] = useForm({
       labelCol: { span: 4 },
       schemas: [
         {
@@ -71,7 +71,7 @@ export default {
         {
           label: '备注',
           field: 'remark',
-          component: 'Textarea',
+          component: 'TextArea',
         },
       ],
     });
@@ -85,10 +85,10 @@ export default {
 
     watch(
       () => props.visible,
-      (val) => {
+      async (val) => {
         const { data } = unref(props);
-        setFieldsValue(data);
         show.value = val;
+        nextTick(() => setFieldsValue(data));
       },
     );
 
@@ -97,17 +97,19 @@ export default {
       show.value = false;
     };
 
-    const onSubmit = () => {
-      validate().then(async () => {
+    const onSubmit = async () => {
+      try {
+        const values = await validate();
         loading.value = true;
-        const { success, msg } = await ApiSaveOrg(model.value);
-        loading.value = false;
+        const { success, msg } = await ApiSaveOrg({ ...props.data, ...values });
         if (success) {
           message.success(msg);
           emit('reload');
           onClose();
         }
-      });
+      } finally {
+        loading.value = false;
+      }
     };
 
     return {

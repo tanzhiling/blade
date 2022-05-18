@@ -13,7 +13,9 @@ export function createRoute(item) {
     closable: true,
     showTab: true,
     icon: item.icon,
+    id: item.id,
     parentId: item.parentId,
+    category: item.category,
   };
   route.meta = meta;
   return route;

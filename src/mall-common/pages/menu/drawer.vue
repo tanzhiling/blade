@@ -2,16 +2,7 @@
   <a-drawer :visible="show" :width="520" :title="title" :mask-closable="false" @close="onClose">
     <a-form ref="formRef" autocomplete="off" :label-col="{ span: 4 }" :model="model" :rules="rules">
       <a-form-item label="上级菜单" name="parentId">
-        <a-tree-select
-          v-model:value="model.parentId"
-          :tree-data="tree"
-          :field-names="{
-            children: 'children',
-            label: 'title',
-            key: 'key',
-            value: 'value',
-          }"
-        />
+        <a-tree-select v-model:value="model.parentId" :tree-data="tree" />
       </a-form-item>
       <a-form-item label="菜单类型" name="category">
         <a-radio-group v-model:value="model.category">
@@ -45,7 +36,7 @@
         <a-input-number v-model:value="model.sort" :min="1" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-textarea v-model:value="model.remark" :rows="4" allow-clear />
+        <a-TextArea v-model:value="model.remark" :rows="4" allow-clear />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -92,9 +83,8 @@ export default {
       () => props.visible,
       (val) => {
         const { data } = unref(props);
-        console.log('data', data);
-        model.value = { ...data };
         show.value = val;
+        model.value = { ...data };
       },
     );
 

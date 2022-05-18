@@ -54,6 +54,7 @@ export default {
             commit('setMenu', menu);
             commit('setRoutes', routes);
             store.set('menu', menu);
+            store.set('routes', routes);
             resolve(routes);
           });
         }
@@ -62,11 +63,23 @@ export default {
     updatePath: async ({ commit }, route) => {
       const { path, meta } = route;
       const menu = store.get('menu');
-      if (path) commit('setActivePath', route.path);
-      if (meta?.parentId) {
-        const current = menu.find((item) => item.id === meta.parentId);
-        commit('setHeaderName', current.code);
-        if (current?.children?.length) commit('setSubMenu', current.children);
+      const routes = store.get('routes');
+      if (meta?.category === 3) {
+        const parent = routes.find((item) => item.meta.id === meta.parentId);
+        // commit('setActivePath', parent.path);
+        if (parent?.meta?.parentId) {
+          const current = menu.find((item) => item.id === parent.meta.parentId);
+          commit('setHeaderName', current?.code);
+          if (current?.children?.length) commit('setSubMenu', current.children);
+        }
+      }
+      if (meta?.category === 1) {
+        // if (path) commit('setActivePath', route.path);
+        if (meta?.parentId) {
+          const current = menu.find((item) => item.id === meta.parentId);
+          commit('setHeaderName', current?.code);
+          if (current?.children?.length) commit('setSubMenu', current.children);
+        }
       }
     },
   },

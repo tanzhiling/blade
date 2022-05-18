@@ -1,6 +1,6 @@
 <template>
-  <a-row class="v-form">
-    <a-col class="v-form-main" :class="getSearch.class">
+  <a-row class="basic-form">
+    <a-col class="basic-form-main" :class="getSearch.class">
       <a-form
         v-bind="getBindValue"
         ref="formRef"
@@ -77,7 +77,7 @@
         </a-row>
       </a-form>
     </a-col>
-    <a-col v-if="getSearch.search" class="v-form-extra">
+    <a-col v-if="getSearch.search" class="basic-form-extra">
       <a-space>
         <a-button type="primary" @click="onSubmit">
           <template #icon><v-icon type="icon-search" /></template>
@@ -132,7 +132,7 @@ export default {
     const getSearch = computed(() => {
       const { search } = unref(getProps);
       return {
-        class: search ? 'v-form-search' : '',
+        class: search ? 'BasicForm-search' : '',
         search,
       };
     });

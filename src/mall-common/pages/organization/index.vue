@@ -1,13 +1,13 @@
 <template>
   <v-card :actions="actions">
-    <v-form search @register="registerForm" />
-    <v-table @register="registerTable">
+    <BasicForm search @register="registerForm" />
+    <BasicTable @register="registerTable">
       <template #actions="{ record }">
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
         <v-btn>新增下级</v-btn>
       </template>
-    </v-table>
+    </BasicTable>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
   </v-card>
 </template>

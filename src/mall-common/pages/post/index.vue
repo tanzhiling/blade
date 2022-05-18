@@ -1,7 +1,7 @@
 <template>
   <v-card :actions="actions">
-    <v-form search @register="registerForm" />
-    <v-table page @register="registerTable">
+    <BasicForm search @register="registerForm" />
+    <BasicTable page @register="registerTable">
       <template #category="{ record }">
         {{ dict && dict.find((item) => item.dictKey === String(record.category))?.dictValue }}
       </template>
@@ -9,7 +9,7 @@
         <v-btn @click="onEdit(record)">编辑</v-btn>
         <v-btn @click="onDel(record)">删除</v-btn>
       </template>
-    </v-table>
+    </BasicTable>
     <i-drawer v-model:visible="visible" :dict="dict" :data="detail" @reload="reload" />
   </v-card>
 </template>

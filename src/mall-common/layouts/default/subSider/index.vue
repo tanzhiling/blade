@@ -29,10 +29,8 @@ import { toRefs } from 'vue';
 export default {
   setup() {
     const store = useStore();
-    const { subMenu, activePath } = toRefs(store.state.menu);
-    const onMenu = (menu) => {
-      console.log('menu', menu);
-    };
+    const { subMenu } = toRefs(store.state.menu);
+    const onMenu = (menu) => {};
     return {
       subMenu,
       onMenu,

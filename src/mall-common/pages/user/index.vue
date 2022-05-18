@@ -5,8 +5,8 @@
         <a-tree show-icon :tree-data="deptData" />
       </a-col>
       <a-col :span="20">
-        <v-form search @register="registerForm" />
-        <v-table page @register="registerTable">
+        <BasicForm search @register="registerForm" />
+        <BasicTable page @register="registerTable">
           <template #sexName="{ record }">
             <a-tag v-if="record.sexName === 1" color="blue">男</a-tag>
             <a-tag v-else-if="record.sexName === 2" color="blue">女</a-tag>
@@ -16,7 +16,7 @@
             <v-btn @click="onDel(record)">删除</v-btn>
             <v-btn @click="onReset(record)">重置密码</v-btn>
           </template>
-        </v-table>
+        </BasicTable>
       </a-col>
     </a-row>
     <i-drawer v-model:visible="visible" :data="detail" :dept-data="deptData" @reload="reload" />

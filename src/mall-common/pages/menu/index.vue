@@ -1,7 +1,7 @@
 <template>
   <v-card :actions="actions">
-    <v-form search @register="registerForm" />
-    <v-table @register="registerTable">
+    <BasicForm search @register="registerForm" />
+    <BasicTable @register="registerTable">
       <template #source="{ record }">
         <v-icon :type="record.source" :size="18" />
       </template>
@@ -15,7 +15,7 @@
         <v-btn @click="onDel(record)">删除</v-btn>
         <v-btn @click="onAddChild(record)">新增下级</v-btn>
       </template>
-    </v-table>
+    </BasicTable>
     <i-drawer v-model:visible="visible" :data="detail" @reload="reload" />
   </v-card>
 </template>

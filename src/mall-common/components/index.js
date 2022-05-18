@@ -1,20 +1,21 @@
-import vBtn from './btn/index.vue';
+import vBtn from './Btn/index.vue';
+import vCard from './Card/index.vue';
+import vException from './Exception/index.vue';
+import vIcon from './Icon/index.vue';
+import vIconSelect from './IconSelect/index.vue';
 
-import vCard from './card/index.vue';
-import vException from './exception/index.vue';
-import vTable from './table/index.vue';
-import vForm from './form/index.vue';
-import vIcon from './icon/index.vue';
-import vIconSelect from './icon-select/index.vue';
+import BasicTable from './Table/index.vue';
+import BasicForm from './Form/index.vue';
 
 export default {
   async install(Vue) {
     Vue.component('VBtn', vBtn);
     Vue.component('VCard', vCard);
     Vue.component('VException', vException);
-    Vue.component('VTable', vTable);
-    Vue.component('VForm', vForm);
     Vue.component('VIcon', vIcon);
     Vue.component('VIconSelect', vIconSelect);
+
+    Vue.component('BasicForm', BasicForm);
+    Vue.component('BasicTable', BasicTable);
   },
 };

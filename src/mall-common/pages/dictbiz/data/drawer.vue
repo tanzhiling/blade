@@ -12,7 +12,7 @@
 <script>
 import { message } from 'ant-design-vue';
 import { computed, ref, unref, watch, nextTick } from 'vue';
-import { ApiSaveDict } from '@mall-common/api/dict';
+import { ApiSaveDict } from '@mall-common/api/dictbiz';
 import useForm from '@mall-common/hooks/useForm';
 export default {
   props: {
@@ -23,7 +23,7 @@ export default {
   setup(props, { emit }) {
     const show = ref(false);
     const loading = ref(false);
-    const title = computed(() => (props.data?.id ? '编辑字典' : '新增字典'));
+    const title = computed(() => (props.data?.id ? '编辑字典明细' : '新增字典明细'));
     const [registerForm, { model, validate, resetFields, setFieldsValue }] = useForm({
       labelCol: { span: 4 },
       schemas: [
@@ -34,10 +34,10 @@ export default {
           rules: [{ required: true, message: '请输入字典名称' }],
         },
         {
-          label: '字典编码',
-          field: 'code',
+          label: '字典键值',
+          field: 'dictKey',
           component: 'Input',
-          rules: [{ required: true, message: '请输入字典编码' }],
+          rules: [{ required: true, message: '请输入字典键值' }],
         },
         {
           label: '排序',
@@ -72,6 +72,7 @@ export default {
       resetFields();
       show.value = false;
     };
+
     const onSubmit = () => {
       validate().then(async () => {
         loading.value = true;

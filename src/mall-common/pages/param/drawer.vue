@@ -12,7 +12,7 @@
 <script>
 import { message } from 'ant-design-vue';
 import { computed, ref, unref, watch, nextTick } from 'vue';
-import { ApiSaveDict } from '@mall-common/api/dict';
+import { ApiSaveParam } from '@mall-common/api/param';
 import useForm from '@mall-common/hooks/useForm';
 export default {
   props: {
@@ -23,26 +23,27 @@ export default {
   setup(props, { emit }) {
     const show = ref(false);
     const loading = ref(false);
-    const title = computed(() => (props.data?.id ? '编辑字典' : '新增字典'));
+    const title = computed(() => (props.data?.id ? '编辑参数' : '新增参数'));
     const [registerForm, { model, validate, resetFields, setFieldsValue }] = useForm({
       labelCol: { span: 4 },
       schemas: [
         {
-          label: '字典名称',
-          field: 'dictValue',
+          label: '参数名称',
+          field: 'paramName',
           component: 'Input',
-          rules: [{ required: true, message: '请输入字典名称' }],
+          rules: [{ required: true, message: '请输入参数名称' }],
         },
         {
-          label: '字典编码',
-          field: 'code',
+          label: '参数键名',
+          field: 'paramKey',
           component: 'Input',
-          rules: [{ required: true, message: '请输入字典编码' }],
+          rules: [{ required: true, message: '请输入参数键名' }],
         },
         {
-          label: '排序',
-          field: 'sort',
-          component: 'InputNumber',
+          label: '参数键值',
+          field: 'paramValue',
+          component: 'Input',
+          rules: [{ required: true, message: '请输入参数键值' }],
         },
         {
           label: '备注',
@@ -72,17 +73,20 @@ export default {
       resetFields();
       show.value = false;
     };
-    const onSubmit = () => {
-      validate().then(async () => {
+
+    const onSubmit = async () => {
+      try {
+        const values = await validate();
         loading.value = true;
-        const { success, msg } = await ApiSaveDict(model.value);
-        loading.value = false;
+        const { success, msg } = await ApiSavePost({ ...props.data, ...values });
         if (success) {
           message.success(msg);
           emit('reload');
           onClose();
         }
-      });
+      } finally {
+        loading.value = false;
+      }
     };
 
     return {
