@@ -34,7 +34,7 @@ service.interceptors.request.use(
   },
   (err) => {
     return Promise.reject(err);
-  }
+  },
 );
 
 service.interceptors.response.use(
@@ -61,10 +61,7 @@ service.interceptors.response.use(
     if (err && err.response) {
       switch (err.response.status) {
         case 400:
-          err.message =
-            err.response.data.error_description ||
-            err.response.data.msg ||
-            '请求错误';
+          err.message = err.response.data.error_description || err.response.data.msg || '请求错误';
           break;
         case 401:
           err.message = '登录信息已失效，请重新登录！';
@@ -110,7 +107,7 @@ service.interceptors.response.use(
       },
     });
     return Promise.reject(new Error(err));
-  }
+  },
 );
 
 export default service;

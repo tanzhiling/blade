@@ -16,7 +16,6 @@ import { ApiGetParamPage, ApiDelParam } from '@mall-common/api/param';
 import useForm from '@mall-common/hooks/useForm';
 import useTable from '@mall-common/hooks/useTable';
 import useModal from '@mall-common/hooks/useModal';
-import useRequest from '@mall-common/hooks/useRequest';
 import iDrawer from './drawer.vue';
 export default {
   components: { iDrawer },

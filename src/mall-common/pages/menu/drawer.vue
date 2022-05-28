@@ -36,7 +36,7 @@
         <a-input-number v-model:value="model.sort" :min="1" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-TextArea v-model:value="model.remark" :rows="4" allow-clear />
+        <a-textarea v-model:value="model.remark" :rows="4" allow-clear />
       </a-form-item>
     </a-form>
     <template #footer>

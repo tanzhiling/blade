@@ -46,6 +46,8 @@
 </template>
 <script>
 import Setting from '@mall-common/config/setting';
+import axios from 'axios';
+
 import { onMounted, reactive, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';

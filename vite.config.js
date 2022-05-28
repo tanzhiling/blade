@@ -17,6 +17,7 @@ export default defineConfig({
       '@mall-activity': pathResolve('src/mall-activity'),
       '@mall-auth': pathResolve('src/mall-auth'),
       '@mall-common': pathResolve('src/mall-common'),
+      '@mall-tools': pathResolve('src/mall-tools'),
     },
   },
   server: {

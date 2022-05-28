@@ -11,6 +11,14 @@ export const BasicRoutes = [
     component: () => import('@mall-common/pages/login/index.vue'),
   },
   {
+    path: '/tools/form',
+    name: 'tools-form',
+    meta: {
+      title: '可视化表单',
+    },
+    component: () => import('@mall-tools/form/index.vue'),
+  },
+  {
     path: '/',
     name: 'basic',
     redirect: {
@@ -36,28 +44,6 @@ export const BasicRoutes = [
           showTab: true,
         },
         component: () => import('@mall-common/pages/home/index.vue'),
-      },
-      {
-        path: '/menu',
-        name: 'menu',
-        meta: {
-          title: '菜单列表',
-          auth: true,
-          closable: false,
-          showTab: true,
-        },
-        component: () => import('@mall-common/pages/menu/index.vue'),
-      },
-      {
-        path: '/user',
-        name: 'user',
-        meta: {
-          title: '用户列表',
-          auth: true,
-          closable: false,
-          showTab: true,
-        },
-        component: () => import('@mall-common/pages/user/index.vue'),
       },
     ],
   },
