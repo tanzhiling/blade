@@ -19,6 +19,14 @@ export const BasicRoutes = [
     component: () => import('@mall-tools/form/index.vue'),
   },
   {
+    path: '/tools/editor',
+    name: 'tools-editor',
+    meta: {
+      title: 'vscode编辑器',
+    },
+    component: () => import('@mall-tools/editor/index.vue'),
+  },
+  {
     path: '/',
     name: 'basic',
     redirect: {

@@ -25,7 +25,6 @@ export default {
         eventProps,
       } = props.data;
       const Comp = componentMap.get(component);
-
       if (component === 'InputNumber') {
         componentProps.formatter = _eval(componentProps.formatter);
         componentProps.parser = _eval(componentProps.parser);
@@ -41,7 +40,7 @@ export default {
             {...dataProps}
             value={field}
             size={size}
-            onChange={(e) => (field = e.target.value)}
+            // onChange={(e) => (field = e.target.value)}
           />
         );
       }
@@ -53,7 +52,7 @@ export default {
             value={field}
             allow-clear
             size={size}
-            onChange={(value) => (field = value)}
+            // onChange={(value) => (field = value)}
           />
         );
       }
@@ -64,7 +63,7 @@ export default {
             {...dataProps}
             value={field}
             size={size}
-            onChange={(e) => (field = e.target.value)}
+            // onChange={(e) => (field = e.target.value)}
           />
         );
       }

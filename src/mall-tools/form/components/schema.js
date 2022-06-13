@@ -2,6 +2,7 @@ import {
   Input,
   Select,
   Radio,
+  Calendar,
   Checkbox,
   Cascader,
   DatePicker,
@@ -13,9 +14,13 @@ import {
   Divider,
   TimePicker,
   TimeRangePicker,
+  Upload,
+  Space,
 } from 'ant-design-vue';
 
 const componentMap = new Map();
+
+componentMap.set('Space', Space);
 
 componentMap.set('Input', Input);
 componentMap.set('Password', Input.Password);
@@ -39,8 +44,10 @@ componentMap.set('WeekPicker', DatePicker.WeekPicker);
 componentMap.set('YearPicker', DatePicker.YearPicker);
 componentMap.set('TimePicker', TimePicker);
 componentMap.set('TimeRangePicker', TimeRangePicker);
+componentMap.set('Calendar', Calendar);
 
 componentMap.set('Divider', Divider);
+componentMap.set('Upload', Upload);
 
 export function add(compName, component) {
   componentMap.set(compName, component);

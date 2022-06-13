@@ -1,23 +1,19 @@
 export default [
   {
-    title: '布局字段',
+    title: '布局组件',
+    type: 'layout',
     list: [
       {
-        component: 'Title',
-        label: '标题',
-        span: 24,
-        componentProps: {},
-      },
-      {
-        component: 'Row',
-        label: '栅格',
+        component: 'Space',
+        label: '间距',
         span: 24,
         componentProps: {},
       },
     ],
   },
   {
-    title: '输入字段',
+    title: '表单组件',
+    type: 'form',
     list: [
       {
         component: 'Input',
@@ -47,11 +43,6 @@ export default [
         formProps: {},
         componentProps: {},
       },
-    ],
-  },
-  {
-    title: '选择字段',
-    list: [
       {
         component: 'Radio',
         label: '单选框',
@@ -71,7 +62,9 @@ export default [
             },
           ],
         },
-        eventProps: {},
+        eventProps: {
+          change: '(val) => {}',
+        },
       },
       {
         component: 'Checkbox',
@@ -157,22 +150,6 @@ export default [
         },
         eventProps: {},
       },
-    ],
-  },
-  {
-    title: '上传字段',
-    list: [
-      {
-        component: 'Upload',
-        label: '上传',
-        span: 24,
-        display: true,
-      },
-    ],
-  },
-  {
-    title: '时间字段',
-    list: [
       {
         component: 'YearPicker',
         label: '年',
@@ -225,14 +202,51 @@ export default [
       {
         component: 'Calendar',
         label: '日历',
-        controls: true,
         span: 24,
-        display: true,
+        formProps: {},
+        // componentProps: {},
+      },
+      {
+        component: 'Upload',
+        label: '上传',
+        span: 24,
+        formProps: {},
+      },
+      {
+        component: 'Rate',
+        label: '评分',
+        span: 24,
+        formProps: {},
+        componentProps: {},
+      },
+      {
+        component: 'Slider',
+        label: '滑动输入条',
+        span: 24,
+        formProps: {},
+        componentProps: {},
       },
     ],
   },
   {
-    title: '插件字段',
+    title: '辅助组件',
+    list: [
+      {
+        component: 'Title',
+        label: '标题',
+        span: 24,
+        componentProps: {},
+      },
+      {
+        component: 'Button',
+        label: '按钮',
+        span: 24,
+        componentProps: {},
+      },
+    ],
+  },
+  {
+    title: '自定义组件',
     list: [
       {
         component: 'RichText',

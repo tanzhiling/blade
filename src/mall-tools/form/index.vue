@@ -13,10 +13,10 @@
             :list="field.list"
             :group="{ name: 'form', pull: 'clone', put: false }"
             :sort="false"
-            :clone="clone"
+            :clone="onClone"
           >
             <template #item="{ element: item, index }">
-              <div class="label" @click="handleFieldClick(item, index)">
+              <div class="label" @click="onFieldClick(item, index)">
                 <img src="http://cdn.dooring.cn/dr/card%402x.png" />
                 <span>{{ item.title || item.label }}</span>
               </div>
@@ -29,7 +29,7 @@
       <a-layout-header>
         <a-space>
           <a-button type="primary">导入JSON</a-button>
-          <a-button type="success" @click="handleExport">导出JSON</a-button>
+          <a-button type="success" @click="onExport">导出JSON</a-button>
           <a-button type="warning">预览</a-button>
           <a-button>清空</a-button>
         </a-space>
@@ -54,69 +54,102 @@
     </a-layout-sider>
     <!-- 导出JSON -->
     <a-drawer v-model:visible="visible" :width="600" placement="right">
-      <vue-json-pretty :data="widgetForm" />
+      <v-editor :value="json" language="json" />
+      <template #footer>
+        <a-space>
+          <a-button @click="onClose">取消</a-button>
+          <a-button type="primary" @click="onSubmit">保存JSON</a-button>
+        </a-space>
+      </template>
     </a-drawer>
   </a-layout>
 </template>
 <script>
 import _ from 'lodash';
-import VueJsonPretty from 'vue-json-pretty';
+import { onMounted, ref, watch } from 'vue';
 import 'vue-json-pretty/lib/styles.css';
 import vuedraggable from 'vuedraggable';
 import WidgetForm from './widgetForm.vue';
 import fieldConfig from './fieldConfig';
 import FormConfig from './formConfig.vue';
 import WidgetConfig from './widgetConfig.vue';
+
 export default {
-  components: { vuedraggable, VueJsonPretty, WidgetForm, FormConfig, WidgetConfig },
-  data() {
-    return {
-      visible: false,
-      fieldConfig,
-      configTab: 'form',
-      widgetForm: {
-        component: 'Form',
-        size: 'default',
-        layout: 'horizontal',
-        labelAlign: 'right',
-        labelCol: 6,
-        wrapperCol: 18,
-        colon: true,
-        column: [],
-      },
-      json: '',
-      widgetFormSelect: {},
-    };
+  components: {
+    vuedraggable,
+    WidgetForm,
+    FormConfig,
+    WidgetConfig,
   },
-  watch: {
-    widgetFormSelect: {
-      handler() {
-        if (this.configTab == 'form') {
-          this.configTab = 'field';
+  setup() {
+    const visible = ref(false);
+    const configTab = ref('form');
+    const widgetForm = ref({
+      component: 'Form',
+      size: 'default',
+      layout: 'horizontal',
+      labelAlign: 'right',
+      labelCol: 6,
+      wrapperCol: 18,
+      colon: true,
+      columns: [],
+    });
+    const json = ref();
+    const widgetFormSelect = ref({});
+
+    watch(
+      () => widgetFormSelect.value,
+      (val) => {
+        if (configTab.value === 'form') {
+          configTab.value = 'field';
         }
       },
-      deep: true,
-    },
-  },
-  methods: {
-    clone(obj) {
+      { deep: true },
+    );
+
+    const onClone = (obj) => {
       const newObj = Object.assign(_.cloneDeep(obj), {
         fieldId: `${obj.component}_${new Date().getTime()}`,
       });
-      this.widgetFormSelect = newObj;
+      widgetFormSelect.value = newObj;
       return newObj;
-    },
-    handleFieldClick(obj, index) {
+    };
+    const onFieldClick = (obj, index) => {
       const newObj = Object.assign(_.cloneDeep(obj), {
         fieldId: `${obj.component}_${new Date().getTime()}`,
       });
-      this.widgetFormSelect = newObj;
-      this.widgetForm.column.push(newObj);
-    },
-    handleExport() {
-      this.visible = true;
-      this.json = JSON.stringify(this.widgetForm);
-    },
+      widgetFormSelect.value = newObj;
+      widgetForm.value.columns.push(newObj);
+    };
+    const onExport = () => {
+      visible.value = true;
+      json.value = JSON.stringify(widgetForm.value);
+    };
+    const onClose = () => {
+      visible.value = false;
+    };
+    const onSubmit = () => {
+      localStorage.setItem('json', json.value);
+    };
+
+    onMounted(() => {
+      const _json = localStorage.getItem('json');
+      if (_json) widgetForm.value = JSON.parse(_json);
+    });
+
+    return {
+      visible,
+      fieldConfig,
+      configTab,
+      widgetForm,
+      widgetFormSelect,
+      json,
+      onClone,
+      onFieldClick,
+      onExport,
+      onClose,
+      onSubmit,
+    };
   },
 };
 </script>

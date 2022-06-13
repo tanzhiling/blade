@@ -8,7 +8,7 @@ import store from '../store';
 
 NProgress.configure({ showSpinner: false });
 
-const whiteNameList = ['/login', '/tools/form'];
+const whiteNameList = ['/login', '/tools/form', '/tools/editor'];
 
 const router = createRouter({
   history: createWebHistory(),

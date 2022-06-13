@@ -8,7 +8,7 @@
     >
       <vuedraggable
         class="widget-form-draggable ant-row"
-        :list="data.column"
+        :list="data.columns"
         group="form"
         item-key="fieldId"
         animation="300"
@@ -76,12 +76,12 @@ export default {
       const newObj = Object.assign(_.cloneDeep(field), {
         fieldId: `${field.component}_${new Date().getTime()}`,
       });
-      data.column.splice(index, 0, newObj);
+      data.columns.splice(index, 0, newObj);
     };
 
     const onRemove = (field, index) => {
       const { data } = unref(props);
-      data.column.splice(index, 1);
+      data.columns.splice(index, 1);
     };
 
     return {
